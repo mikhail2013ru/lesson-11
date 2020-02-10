@@ -25,8 +25,6 @@ let periodSelect = document.querySelector('.period-select');
 let incomeItems = document.querySelectorAll('.income-items');
 let periodAmount = document.querySelector('.period-amount');
 
-console.log(periodAmount);
-
 let isNumber = function(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
 };
@@ -69,6 +67,7 @@ let appData = {
       appData.getAddExpenses();
       appData.getAddIncome();
       appData.getIncome();
+      appData.getRangePeriod();
       appData.showResult();
   },
 
@@ -81,12 +80,15 @@ let appData = {
     targetMonthValue.value = Math.ceil(appData.getTargetMonth());
     incomePeriodValue.value = appData.calcPeriod();
 
-    periodAmount.value.addEventListener('input', appData.getPeriodValue);
+    periodAmount.textContent.addEventListener('onchange', appData.getPeriodValue);
+    // console.log(periodAmount.value);
   },
 
   getPeriodValue: function(){
-    //incomePeriodValue.value = appData.getRangePeriod();
-    incomePeriodValue.value.textContent = appData.getRangePeriod();
+    periodAmount.addEventListener('input', function(){
+      incomePeriodValue.placeholder = periodAmount.textContent;
+    });
+    incomePeriodValue.placeholder = periodAmount.textContent;
   },
 
   addExpensesBlock: function(){
@@ -189,7 +191,7 @@ let appData = {
   },
 
   getRangePeriod: function(){
-    return periodAmount.textContent = periodSelect.value;
+    periodAmount.textContent = periodSelect.value;
     //periodSelect.textContent.value = periodAmount.value;
   },
 
@@ -235,6 +237,11 @@ buttonPlusIncome.addEventListener('click', appData.addIncomeBlock);
 periodSelect.addEventListener('input', appData.getRangePeriod);
 
 appData.getPeriodValue();
+
+periodAmount.addEventListener('input', appData.getPeriodValue);
+// console.log(periodAmount.textContent);
+//console.log(incomePeriodValue.placeholder = periodAmount.textContent);
+// incomePeriodValue.placeholder = '255';
 
 appData.getStatusIncome();
 
