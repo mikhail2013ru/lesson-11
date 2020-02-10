@@ -22,7 +22,10 @@ let incomePeriodValue = document.querySelector('.income_period-value');
 let targetMonthValue = document.querySelector('.target_month-value');
 let expensesItems = document.querySelectorAll('.expenses-items');
 let periodSelect = document.querySelector('.period-select');
-let incomeItem = document.querySelectorAll('.income-items');
+let incomeItems = document.querySelectorAll('.income-items');
+let periodAmount = document.querySelector('.period-amount');
+
+console.log(periodAmount);
 
 let isNumber = function(n) {
   return !isNaN(parseFloat(n)) && isFinite(n);
@@ -77,6 +80,13 @@ let appData = {
     additionalIncomeValue.value = appData.addIncome.join(', ');
     targetMonthValue.value = Math.ceil(appData.getTargetMonth());
     incomePeriodValue.value = appData.calcPeriod();
+
+    periodAmount.value.addEventListener('input', appData.getPeriodValue);
+  },
+
+  getPeriodValue: function(){
+    //incomePeriodValue.value = appData.getRangePeriod();
+    incomePeriodValue.value.textContent = appData.getRangePeriod();
   },
 
   addExpensesBlock: function(){
@@ -86,6 +96,16 @@ let appData = {
 
     if(expensesItems.length === 3){
       buttonPlusExpenses.style.display = 'none';
+    }
+  },
+
+  addIncomeBlock: function(){
+    let cloneIncomeItems = incomeItems[0].cloneNode(true);
+    incomeItems[0].parentNode.insertBefore(cloneIncomeItems, buttonPlusIncome);
+    incomeItems = document.querySelectorAll('.income-items');
+
+    if(incomeItems.length === 3){
+      buttonPlusIncome.style.display = 'none';
     }
   },
 
@@ -104,10 +124,9 @@ let appData = {
   getIncome: function(){
     //тоже что getexpenses только с доходами
     additionalIncomeItem.forEach(function(item){
-      console.log(item);
-        let itemIncome = item.querySelectorAll('.additional_income-item')[0].value;
+        let itemIncome = item.value;
         console.log(itemIncome);
-        let cashIncome = item.querySelectorAll('.additional_income-item')[1].value;
+        let cashIncome = item.value;
 
         if(itemIncome !== '' && cashIncome !== '') {
           appData.income[itemIncome] = cashIncome;
@@ -169,6 +188,11 @@ let appData = {
     return (Math.ceil(targetAmount.value / appData.budgetMonth));
   },
 
+  getRangePeriod: function(){
+    return periodAmount.textContent = periodSelect.value;
+    //periodSelect.textContent.value = periodAmount.value;
+  },
+
   getStatusIncome: function(){
     if (appData.budgetDay >= 1200) {
       console.log('“У вас высокий уровень дохода”');
@@ -205,6 +229,12 @@ let appData = {
 start.addEventListener('click', appData.start);
 
 buttonPlusExpenses.addEventListener('click', appData.addExpensesBlock);
+
+buttonPlusIncome.addEventListener('click', appData.addIncomeBlock);
+
+periodSelect.addEventListener('input', appData.getRangePeriod);
+
+appData.getPeriodValue();
 
 appData.getStatusIncome();
 
