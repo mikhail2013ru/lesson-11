@@ -48,27 +48,44 @@ let appData = {
   percentDeposit: 0,
   moneyDeposit: 0,
   period: 8,
+
   start: function() {
     // do {
     //   money = +prompt('“Ваш месячный доход?”');
     
     //   } while (!isNumber(parseFloat(money)));
-      if(salaryAmount.value === ''){
-        alert('Ошибка, поле "Месячный доход" должно быть заполнено!');
-        return;
-      }
+      // if(salaryAmount.value === ''){
+      //   alert('Ошибка, поле "Месячный доход" должно быть заполнено!');
+      //   return;
+      // }
+
+      // do {
+      //   start.disabled = true;
+      //   return false;
+      // } while(salaryAmount.value === '' && salaryAmount.value === 0)     
+      
       appData.budget = +salaryAmount.value;
       console.log('salaryAmount.value: ', salaryAmount.value);
 
       appData.getExpenses();
-      // appData.asking();
       appData.getExpensesMonth();
       appData.getBudget();
       appData.getAddExpenses();
-      appData.getAddIncome();
-      appData.getIncome();
+      appData.getButtonStart();
       appData.getRangePeriod();
       appData.showResult();
+  },
+
+  getButtonStart: function(){
+    start.setAttribute('disabled', 1);
+    salaryAmount.addEventListener('input', function(e){
+      if(e.target.value.trim() !== '') {
+        start.removeAttribute('disabled');
+        appData.getIncome();
+      } else {
+        start.setAttribute('disabled', 1);
+      }
+    });
   },
 
   showResult:function(){
@@ -80,15 +97,16 @@ let appData = {
     targetMonthValue.value = Math.ceil(appData.getTargetMonth());
     incomePeriodValue.value = appData.calcPeriod();
 
-    periodAmount.textContent.addEventListener('onchange', appData.getPeriodValue);
-    // console.log(periodAmount.value);
+    periodSelect.addEventListener('input', function(){
+      incomePeriodValue.value = appData.calcPeriod();
+    });
   },
 
   getPeriodValue: function(){
-    periodAmount.addEventListener('input', function(){
-      incomePeriodValue.placeholder = periodAmount.textContent;
+    periodSelect.addEventListener('input', function(e){
+      periodAmount.textContent = e.target.value;
+      incomePeriodValue.value = e.target.value;
     });
-    incomePeriodValue.placeholder = periodAmount.textContent;
   },
 
   addExpensesBlock: function(){
@@ -192,6 +210,7 @@ let appData = {
 
   getRangePeriod: function(){
     periodAmount.textContent = periodSelect.value;
+    //length.periodAmount.textContent = periodSelect.value;
     //periodSelect.textContent.value = periodAmount.value;
   },
 
@@ -243,6 +262,8 @@ periodAmount.addEventListener('input', appData.getPeriodValue);
 //console.log(incomePeriodValue.placeholder = periodAmount.textContent);
 // incomePeriodValue.placeholder = '255';
 
+periodAmount.addEventListener('mouseup', appData.getPeriodValue);
+
 appData.getStatusIncome();
 
 for (let key in appData) {
@@ -251,3 +272,15 @@ for (let key in appData) {
 }
 
 appData.getInfoDeposit();
+
+// if(salaryAmount.value === '' && salaryAmount.value === 0) {
+//   start.disabled = true;
+//   return false;
+// }
+
+// function z(){
+  
+//   return false;
+// }
+
+// z();
